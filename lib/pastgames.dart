@@ -32,6 +32,7 @@ class _PastGamesState extends State<PastGames> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
           child: (allgames.isEmpty)
@@ -55,14 +56,21 @@ class _PastGamesState extends State<PastGames> {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 30),
-                        height: 550,
+                        height: height*0.65,
                         child: ListView.builder(
                           itemCount: allgames.length,
                           itemBuilder: (BuildContext ctxt, int i) {
                             return InkWell(
                               child: Container(
                                 padding: EdgeInsets.all(15),
-                                child: Text(allgames[i]["dt"], style: TextStyle(fontSize: 18),),
+                                child: new Column(
+                                 mainAxisAlignment: MainAxisAlignment.center,
+                                 children: <Widget>[
+                                   Text(allgames[i]["dt"], style: TextStyle(fontSize: 18)),
+                                   Divider(height: height*0.03,color: Colors.grey)
+                                 ],
+                                  
+                                ),
                               ),
                               onTap: () {
                                 Navigator.push(

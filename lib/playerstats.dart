@@ -22,7 +22,7 @@ class _PlayerStatsState extends State<PlayerStats> {
       var wp =
           (data[i]["CNT"] != 0) ? (data[i]["WIN"] / data[i]["CNT"]) * 100 : 0;
       var ppg =
-          (data[i]["CNT"] != 0) ? (data[i]["PTS"] / data[i]["CNT"]) * 100 : 0;
+          (data[i]["CNT"] != 0) ? (data[i]["PTS"] / data[i]["CNT"]) : 0;
       var fg = (data[i]["2PA"] != 0 || data[i]["3PA"] != 0)
           ? (data[i]["2PM"] + data[i]["3PM"]) /
               (data[i]["2PA"] + data[i]["3PA"]) *
@@ -193,6 +193,8 @@ class _PlayerStatsState extends State<PlayerStats> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: (data.isEmpty)
@@ -211,7 +213,7 @@ class _PlayerStatsState extends State<PlayerStats> {
                   ),
                 ),
                    Container(
-                     height: 600,
+                     height: height * 0.73,
                   child: ListView(
               children: <Widget>[
                 
@@ -314,7 +316,7 @@ class _PlayerStatsState extends State<PlayerStats> {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 30),
+                      margin: EdgeInsets.only(bottom: height*0.01),
                       child: RaisedButton(
                         color: Colors.blue,
                         padding:
