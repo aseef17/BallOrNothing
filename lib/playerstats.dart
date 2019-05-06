@@ -205,7 +205,7 @@ class _PlayerStatsState extends State<PlayerStats> {
               child: Column(
                 children: <Widget>[
                   Container(
-                  margin: EdgeInsets.only(top: 40, bottom: 30),
+                  margin: EdgeInsets.only(top: 60, bottom: 30),
                   child: Text(
                     'PLAYERS STATS',
                     textAlign: TextAlign.center,

@@ -46,7 +46,7 @@ class _PastGamesState extends State<PastGames> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(top: 40, bottom: 30),
+                        margin: EdgeInsets.only(top: 60, bottom: 30),
                         child: Text(
                           'GAME STATS',
                           textAlign: TextAlign.center,
