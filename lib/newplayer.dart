@@ -13,15 +13,31 @@ class NewPlayer extends StatefulWidget {
 }
 
 class _NewPlayerState extends State<NewPlayer> {
+
+  // void deleteImg(p) async {
+  //   print("CALLED");
+  //   final appDocDir = await getApplicationDocumentsDirectory();
+  //   var path = appDocDir.path + "/" + p;
+  //   var f = File(path);
+  //   if (f.existsSync()) {
+  //     f.delete();
+  //     // print("DELETED $path");
+  //     print("CALLED TO DELETE $path");
+
+  //   }
+  // }
+
   String imgp;
   String lab = "CREATE NEW PLAYER";
   var _dex = 0;
   bool namer = false;
   bool edit = false;
+  // bool clearImg;
   String filename;
   String path;
   String eors = "SAVE";
   var image;
+  var imaged;
 
   final t1 = TextEditingController();
   final t2 = TextEditingController();
@@ -37,7 +53,8 @@ class _NewPlayerState extends State<NewPlayer> {
   }
 
   void reset() {
-    print("reset state");
+    // print("reset state");
+    // deleteImg(t1.text);
     setState(() {
       imgp = null;
       image = null;
@@ -88,7 +105,7 @@ class _NewPlayerState extends State<NewPlayer> {
       return;
     }
 
-      var playerobj = {
+    var playerobj = {
       "name": "${t1.text}",
       "age": "${t2.text}",
       "height": "${t3.text}",
@@ -110,10 +127,9 @@ class _NewPlayerState extends State<NewPlayer> {
     };
 
     await localDB('update', widget.pld[0]["name"], 'players', playerobj);
-    print("Updated");
+    // print("Updated");
     Navigator.pop(context);
     Navigator.pop(context);
-
   }
 
   void saveplayer() async {
@@ -143,6 +159,7 @@ class _NewPlayerState extends State<NewPlayer> {
               ],
             );
           });
+      // clearImg = false;
       return;
     }
 
@@ -178,10 +195,11 @@ class _NewPlayerState extends State<NewPlayer> {
       return;
     }
 
-    if(image == null) {
+    if (imaged == null) {
       imgp = "images/def.png";
     } else {
-      await image.copy(imgp);
+      // await image.copy(imgp);
+      await imaged.copy(path + "/" + t1.text);
     }
     var playerobj = {
       "name": "${t1.text}",
@@ -205,21 +223,25 @@ class _NewPlayerState extends State<NewPlayer> {
     };
 
     await localDB('add', playerobj, 'players', null);
-    print("Saved");
+    // print("Saved");
     Navigator.pop(context);
   }
 
-  // Business logic
   void pickImage() async {
+    print("Selecting img");
+    print("Name ${t1.text}");
     image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
     final appDocDir = await getApplicationDocumentsDirectory();
     path = appDocDir.path;
-    await image.copy(path+"/"+imgp);
+    print("image selected: ${image.path}");
+    // await image.copy(path + "/" + t1.text);
     setState(() {
-      // imgp = image.path.toString();
-      imgp = path+"/"+t1.text;
-      print("YPYPYP:" + imgp);
+      imgp = path + "/" + t1.text;
+      imaged = image; 
+      // imgp = path+"/"+t1.text;
+      // print("YPYPYP:" + imgp);
+      // print(image.path.toString());
     });
     istack();
   }
@@ -235,9 +257,9 @@ class _NewPlayerState extends State<NewPlayer> {
       t5.text = widget.pld[0]["strength"].toString();
       t6.text = widget.pld[0]["weakness"].toString();
       // if (widget.pld[0]["img"] == "images/def.png") {
-        // image = DefaultAssetBundle.of(context).load('images/def.png');
+      // image = DefaultAssetBundle.of(context).load('images/def.png');
       // } else {
-        image = File(cpath.path + "/" + widget.pld[0]["img"]);
+      image = File(cpath.path + "/" + widget.pld[0]["img"]);
       // }
       edit = true;
       eors = "EDIT";
@@ -250,7 +272,7 @@ class _NewPlayerState extends State<NewPlayer> {
     super.initState();
 
     if (widget.pld == null) {
-      print(widget.pld);
+      // print(widget.pld);
       return;
     } else {
       inject();
@@ -259,8 +281,9 @@ class _NewPlayerState extends State<NewPlayer> {
 
   @override
   void dispose() {
-    super.dispose();
     widget.pld = null;
+    print("DISPOSING");
+    super.dispose();
   }
 
   @override
@@ -314,15 +337,17 @@ class _NewPlayerState extends State<NewPlayer> {
                       ],
                     ),
                     Container(
-                        padding: EdgeInsets.all(10),
-                        child: (imgp == "images/def.png"|| imgp==null)
-                            ? Image.asset('images/def.png')
-                            : Image.file(File(imgp),),
-                        // decoration: BoxDecoration(
-                        // image: DecorationImage(
-                        // fit: BoxFit.contain, image: ExactAssetImage(imgp)),
-                        // ),
-                        ),
+                      padding: EdgeInsets.all(10),
+                      child: (imgp == "images/def.png" || imgp == null)
+                          ? Image.asset('images/def.png')
+                          : Image.file(
+                              imaged,
+                            ),
+                      // decoration: BoxDecoration(
+                      // image: DecorationImage(
+                      // fit: BoxFit.contain, image: ExactAssetImage(imgp)),
+                      // ),
+                    ),
                   ],
                 ),
               ),

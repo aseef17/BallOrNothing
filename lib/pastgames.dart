@@ -35,7 +35,7 @@ class _PastGamesState extends State<PastGames> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          child: (allgames.isEmpty || allgames == null)
+          child: (allgames.isEmpty)
               ? Container(
                   child: Center(
                     child: CircularProgressIndicator(),

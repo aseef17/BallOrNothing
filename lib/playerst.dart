@@ -1,12 +1,3 @@
-// W - Total Wins
-// L - Total Losses
-// WIN% - Win % ( matches won / matches played )
-// PTS - Total Points
-// PPG - points per game (total points / total games played)
-// FG% - field goal % ( 2 pointers and 3 pointers are collectively called field goals. - FG% is total made field goals/total attempted field goals )
-// 3PM - Total 3 pointers made
-// 3P% -  3 point % (total 3 pointers made / total 3 pointers attempted)
-
 import 'db.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +10,10 @@ class _PlayerStatsState extends State<PlayerStats> {
   var data = [];
   var j=0;
 
+ 
   Future getplayers() async {
     var r = await localDB('getall', null, 'players', null);
+    print(r);
     return r;
   }
 
@@ -34,6 +27,39 @@ class _PlayerStatsState extends State<PlayerStats> {
     super.initState();
   }
 
+   Widget rowGen(d) {
+     print("INTO BUILD $d");
+      var l = (d["CNT"]) - d["WIN"];
+      print(l);
+      print(d["CNT"]);
+      print(l);
+
+      var wp = (d["CNT"] != 0 ) ? (d["WIN"] / d["CNT"]) * 100 : 0 ;
+      var ppg = (d["CNT"] != 0 ) ? (d["PTS"] / d["CNT"]) * 100 : 0;
+      var fg =  (d["2PA"] !=0 || d["3PA"] != 0 ) ? (d["2PM"] + d["3PM"]) / (d["2PA"] + d["3PA"]) * 100 : 0;
+      var pp3 =   (d["3PA"] != 0 ) ? (d["3PM"] / d["3PA"]) * 100 : 0;
+   
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+      Container(
+        width: 60,
+        child: Text(d["name"])
+        ,
+      ),
+      Text(d["WIN"].toString()),
+      Text(l.toStringAsFixed(2)),
+      Text(wp.toStringAsFixed(2)),
+      Text(d["PTS"].toString()),
+      Text(ppg.toStringAsFixed(2)),
+      Text(fg.toStringAsFixed(2)),
+      Text(d["3PM"].toString()),
+      Text(pp3.toStringAsFixed(2)),
+    ],
+    );
+
+   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,29 +69,41 @@ class _PlayerStatsState extends State<PlayerStats> {
               child: CircularProgressIndicator(),
             )
           : Container(
-            margin: EdgeInsets.only(top: 90),
+            margin: EdgeInsets.only(top: 30),
               child: Column(children: <Widget>[
-              Row(
+              
+              Container(
+                            padding: EdgeInsets.all(5),
+
+                color: Colors.blue,
+                child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text("PLR"),
-                  Text("W"),
-                  Text("L"),
-                  Text("WIN%"),
-                  Text("PTS"),
-                  Text("PPG"),
-                  Text("FG%"),
-                  Text("3PM"),
-                  Text("3P%"),
+                  Text("PLR", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                  Text("W" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("L" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("WIN%" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("PTS" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("PPG" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("FG%" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("3PM" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("3P%" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
                 ],
               ),
+              ),
               Container(
+                padding: EdgeInsets.all(5),
                 height: 400,
-                child: Column(
-                  children: <Widget>[
-                    
-                  ],
-                )
+                child: ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (BuildContext ctxt, i){
+                  return Container(
+                    // color: Colors.red,
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: rowGen(data[i]),
+                  );
+                },
+              ),
               )
             ])),
     ));

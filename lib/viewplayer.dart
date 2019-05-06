@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'newplayer.dart';
 import 'db.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+
 
 class ViewPlayer extends StatefulWidget {
   final String name;
@@ -22,9 +25,20 @@ class _ViewPlayerState extends State<ViewPlayer> {
 
   Future getplayer(n) async {
     var r = await localDB('get', n, 'players', null);
-    print("Output $r ENDS");
-    print(r[0]['age']);
+    // print("Output $r ENDS");
+    // print(r[0]['age']);
     return r;
+  }
+  void deleteImg(p) async {
+    print("CALLED");
+    final appDocDir = await getApplicationDocumentsDirectory();
+    var path = appDocDir.path + "/" + p;
+    var f = File(path);
+    if (f.existsSync()) {
+      f.delete();
+      // print("CALLED TO DELETE $path");
+      // print("DELETED $path");
+    }
   }
 
   @override
@@ -46,6 +60,7 @@ class _ViewPlayerState extends State<ViewPlayer> {
           t5.text = snap.data[0]["strength"].toString();
           t6.text = snap.data[0]["weakness"].toString();
           image = snap.data[0]["img"].toString();
+          print("VV img $image");
 
           return ListView(
             children: <Widget>[
@@ -184,7 +199,8 @@ class _ViewPlayerState extends State<ViewPlayer> {
                       child:
                           Text('DELETE', style: TextStyle(color: Colors.white)),
                       onPressed: () async {
-                        await localDB('delete', widget.name, 'players', null);
+                        await localDB('delete', widget.name, 'players', null);    
+                        deleteImg(widget.name);                    
                         Navigator.pop(context);
                       },
                     ),

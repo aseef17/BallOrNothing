@@ -30,7 +30,7 @@ class _ViewGameState extends State<ViewGame> {
   // }
   @override
   Widget build(BuildContext context) {
-    print(widget.game);
+    // print(widget.game);
     final height = MediaQuery.of(context).size.height / 100;
     final width = MediaQuery.of(context).size.width / 100;
     return Scaffold(

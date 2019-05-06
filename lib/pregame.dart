@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'game.dart';
 import 'db.dart';
-import 'package:uuid/uuid.dart';
 
 class PreGame extends StatefulWidget {
   @override
@@ -9,13 +8,12 @@ class PreGame extends StatefulWidget {
 }
 
 class _PreGameState extends State<PreGame> {
-
   getallplayers() async {
     var r = await localDB('getall', null, 'players', null);
     setState(() {
       // players.add(r);
       players.addAll(r);
-      print("ist is ${players.length}");
+      // print("ist is ${players.length}");
     });
   }
 
@@ -24,13 +22,12 @@ class _PreGameState extends State<PreGame> {
   var bplayers = [];
   var apn = [];
   var bpn = [];
-
+  bool sright = true, sleft = true;
   @override
   void initState() {
     getallplayers();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +62,7 @@ class _PreGameState extends State<PreGame> {
                         return Container(
                           color: Colors.white,
                           child: Dismissible(
-                            background: Container(
+                            background: (sright == true) ? Container(
                               child: Container(
                                   padding: EdgeInsets.only(
                                       top: height * 4, left: width * 3),
@@ -75,18 +72,38 @@ class _PreGameState extends State<PreGame> {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   color: Colors.blue),
-                            ),
-                            secondaryBackground: Container(
-                                child: Container(
-                              padding: EdgeInsets.only(
-                                  top: height * 4, right: width * 3),
-                              child: Text(
-                                "ADD TO TEAM B",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              color: Colors.green,
-                            )),
+                            ) : Container(
+                                    padding: EdgeInsets.only(
+                                        top: height * 4, left: width * 3),
+                                    child: Text(
+                                      "Team A Full",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    color: Colors.red,
+                                  ),
+                            secondaryBackground: (sleft == true)
+                                ? Container(
+                                    child: Container(
+                                    padding: EdgeInsets.only(
+                                        top: height * 4, right: width * 3),
+                                    child: Text(
+                                      "ADD TO TEAM B",
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    color: Colors.green,
+                                  ))
+                                : Container(
+                                    padding: EdgeInsets.only(
+                                        top: height * 4, right: width * 3),
+                                    child: Text(
+                                      "Team B Full",
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    color: Colors.red,
+                                  ),
                             key: Key(UniqueKey().toString()),
                             child: Container(
                               width: width * 95,
@@ -107,47 +124,59 @@ class _PreGameState extends State<PreGame> {
                               ),
                             ),
                             onDismissed: (e) {
-                              var uuid = new Uuid();
-                              if(apn.length >= 4) {
+                              // var uuid = new Uuid();
+                              // if(apn.length >= 4) {
 
-                                String player = players[i];
-                                
-                                setState(() {
-                                  
-                                  players.add(player);
-                                  // players[i].uniqueid = uuid.v1();
-                                });
+                              //   // String player = players[i];
 
-                                print("More than 4 in A not Allowed");
+                              //   // setState(() {
 
-                              } else if(bpn.length >= 4 ) {
+                              //   //   players.add(player);
+                              //   //   // players[i].uniqueid = uuid.v1();
+                              //   // });
 
-                                print("More than 4 in B not Allowed");
+                              //   // print("More than 4 in A not Allowed");
 
-                              } else {
+                              // } else if(bpn.length >= 4 ) {
 
-                              if (e == DismissDirection.startToEnd) {
+                              //   // print("More than 4 in B not Allowed");
+
+                              // } else {
+
+                              if (e == DismissDirection.startToEnd &&
+                                  sright == true) {
                                 aplayers.add(players[i]);
                                 apn.add(players[i]["name"]);
-                              } else if (e == DismissDirection.endToStart) {
+                                setState(() {
+                                  players.removeAt(i);
+                                });
+                              } else if (e == DismissDirection.endToStart &&
+                                  sleft == true) {
                                 bplayers.add(players[i]);
                                 bpn.add(players[i]["name"]);
-
+                                setState(() {
+                                  players.removeAt(i);
+                                });
                               }
-                              setState(() {
-                                players.removeAt(i);
-                              });
+                              if (aplayers.length == 4) {
+                                setState(() {
+                                  sright = false;
+                                });
+                              } else if (bplayers.length == 4) {
+                                setState(() {
+                                  sleft = false;
+                                });
+                              }
+
                               if (aplayers.length >= 4 &&
                                   bplayers.length >= 4) {
-                                print("GAME ON");
+                                // print("GAME ON");
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          GamePage(aplayers, apn, bplayers, bpn),
+                                      builder: (context) => GamePage(
+                                          aplayers, apn, bplayers, bpn),
                                     ));
-                              }
-
                               }
                             },
                           ),

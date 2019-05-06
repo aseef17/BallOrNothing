@@ -11,7 +11,6 @@ class GamePage extends StatefulWidget {
   _GamePageState createState() => _GamePageState();
 }
 
-
 class _GamePageState extends State<GamePage> {
   var players = [];
 
@@ -107,14 +106,17 @@ class _GamePageState extends State<GamePage> {
     0,
     0
   ];
+
+  var ppa = [], ppb = [];
   var dt = DateTime.now().toString().split('.')[0];
   var score1 = 0, score2 = 0;
 
   void logic(i, p) {
-    print("tapped" + i.toString());
+
     if (i == 0 || i == 9 || i == 18 || i == 27) {
       return;
     }
+
     if (p == 1) {
       if (i == 1 ||
           i == 10 ||
@@ -126,13 +128,18 @@ class _GamePageState extends State<GamePage> {
           i == 30) {
         pa[i + 1] = pa[i + 1] + 1;
       }
+
       pa[i] = pa[i] + 1;
       pa[0] = pa[1] * 2 + pa[3] * 3;
       pa[9] = pa[10] * 2 + pa[12] * 3;
       pa[18] = pa[19] * 2 + pa[21] * 3;
       pa[27] = pa[28] * 2 + pa[30] * 3;
       score1 = pa[0] + pa[9] + pa[18] + pa[27];
-      setState(() {});
+
+      setState(() {
+        var i = 0;
+        ppa.add(pa);
+      });
     } else if (p == 2) {
       if (i == 1 ||
           i == 10 ||
@@ -144,27 +151,17 @@ class _GamePageState extends State<GamePage> {
           i == 30) {
         pb[i + 1] = pb[i + 1] + 1;
       }
-      // if (i == 0 || i == 9 || i == 18 || i == 27) {
-      //   return;
-      // }
-      // if (i == 1 || i == 10 || i == 19 || i == 28) {
-      //   pb[i] = pb[i] + 2;
-      //   pb[i + 1] = pb[i + 1] + 1;
-      // } else if (i == 3 || i == 12 || i == 21 || i == 30) {
-      //   pb[i] = pb[i] + 3;
-      //   pb[i + 1] = pb[i + 1] + 1;
-      // } else {
-      //   pb[i] = pb[i] + 1;
-      // }
+
       pb[i] = pb[i] + 1;
       pb[0] = pb[1] * 2 + pb[3] * 3;
       pb[9] = pb[10] * 2 + pb[12] * 3;
       pb[18] = pb[19] * 2 + pb[21] * 3;
       pb[27] = pb[28] * 2 + pb[30] * 3;
       score2 = pb[0] + pb[9] + pb[18] + pb[27];
-      setState(() {});
-      print(score1);
-      print(score2);
+
+      setState(() {
+        ppb.add(pb);
+      });
     }
 
     if (score1 >= 20 || score2 >= 20) {
@@ -174,8 +171,8 @@ class _GamePageState extends State<GamePage> {
           context: context,
           builder: (BuildContext context) {
             return WillPopScope(
-                onWillPop: () {},
-                child: AlertDialog(
+              onWillPop: () {},
+              child: AlertDialog(
                 title: Text("! Winner !"),
                 content: Text(
                   "🏀🏆 Team $t wins 🎉👏",
@@ -200,7 +197,7 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
- Future  upd(n, d) async {
+  Future upd(n, d) async {
     await localDB('update', n, 'players', d);
     return;
   }
@@ -288,7 +285,7 @@ class _GamePageState extends State<GamePage> {
     widget.bteam[2]["AST"] = widget.bteam[2]["AST"] + pb[24];
     widget.bteam[2]["BLK"] = widget.bteam[2]["BLK"] + pb[25];
     widget.bteam[2]["STL"] = widget.bteam[2]["STL"] + pb[26];
-    
+
     widget.bteam[3]["PTS"] = widget.bteam[3]["PTS"] + pb[27];
     widget.bteam[3]["2PM"] = widget.bteam[3]["2PM"] + pb[28];
     widget.bteam[3]["2PA"] = widget.bteam[3]["2PA"] + pb[29];
@@ -299,7 +296,6 @@ class _GamePageState extends State<GamePage> {
     widget.bteam[3]["BLK"] = widget.bteam[3]["BLK"] + pb[34];
     widget.bteam[3]["STL"] = widget.bteam[3]["STL"] + pb[35];
 
-    
     upd(widget.ateam[0]["name"], widget.ateam[0]).then((e) {
       upd(widget.ateam[1]["name"], widget.ateam[1]).then((e) {
         upd(widget.ateam[2]["name"], widget.ateam[2]).then((e) {
@@ -316,9 +312,6 @@ class _GamePageState extends State<GamePage> {
       });
     });
   }
-
-
-  //
 
   @override
   Widget build(BuildContext context) {
@@ -620,7 +613,12 @@ class _GamePageState extends State<GamePage> {
                     "Undo",
                     style: TextStyle(fontSize: 11, color: Colors.white),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      pa = List.from(ppa.removeLast());
+                      pb = List.from(ppb.removeLast());
+                    });
+                  },
                 ),
               ),
             ],

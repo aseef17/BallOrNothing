@@ -12,7 +12,6 @@ class Players extends StatefulWidget {
 class _PlayersState extends State<Players> {
   Future getplayers() async {
     var r = await localDB('getall', null, 'players', null);
-    print("API CALL $r");
     return r;
   }
 
@@ -29,7 +28,6 @@ class _PlayersState extends State<Players> {
       future: getplayers(),
       builder: (context, snap) {
         if (snap.hasData && snap.connectionState == ConnectionState.done && snap.data.isNotEmpty) {
-          // print("yyyyyyyyyyyyyyyyyyyyyeeeeeeeeeeeeeesssssss");
           return Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -48,9 +46,11 @@ class _PlayersState extends State<Players> {
                   height: MediaQuery.of(context).size.height / 100 * 70,
                   child: GridView.count(
                     crossAxisCount: 5,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 25,
                     children: List.generate(snap.data.length, (i) {
                       return Container(
-                        height: 350,
+                        height: 380,
                         child: InkWell(
                           child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

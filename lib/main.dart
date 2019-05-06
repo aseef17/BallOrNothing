@@ -62,11 +62,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Image.asset(
             'images/logo.png',
-            width: 130,
+            width: 115,
           ),
           RaisedButton(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: EdgeInsets.symmetric(horizontal: 95, vertical: 15),
             child: Text('NEW GAME'),
             onPressed: () {
               Navigator.pushNamed(context, '/pregame');
@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           RaisedButton(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: EdgeInsets.symmetric(horizontal: 95, vertical: 15),
             child: Text('PLAYERS'),
             onPressed: () {
               Navigator.pushNamed(context, '/players');
@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           RaisedButton(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: EdgeInsets.symmetric(horizontal: 95, vertical: 15),
             child: Text('RECORDS'),
             onPressed: () {
               Navigator.pushNamed(context, '/pastgames');
