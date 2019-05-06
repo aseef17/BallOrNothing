@@ -25,7 +25,7 @@ localDB(req, data, slot, ndata) async {
 
     case "update":
       await db.update({"name":data}, ndata, true);
-      print("updting");
+      // print("updting");
     break;
 
     case "delete":

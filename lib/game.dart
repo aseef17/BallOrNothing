@@ -112,7 +112,6 @@ class _GamePageState extends State<GamePage> {
   var score1 = 0, score2 = 0;
 
   void logic(i, p) {
-
     if (i == 0 || i == 9 || i == 18 || i == 27) {
       return;
     }
@@ -187,7 +186,7 @@ class _GamePageState extends State<GamePage> {
                     onPressed: () {
                       // Navigator.of(context).pop();
                       Navigator.pushReplacement(context, HomePage);
-                      savestate();
+                      savestate(t);
                     },
                   ),
                 ],
@@ -202,7 +201,7 @@ class _GamePageState extends State<GamePage> {
     return;
   }
 
-  void savestate() async {
+  void savestate(t) async {
     var game = {
       "dt": dt,
       "statea": pa,
@@ -215,6 +214,9 @@ class _GamePageState extends State<GamePage> {
 
     await localDB('add', game, 'games', null);
 
+    var wa = (t == "A") ? 1 : 0;
+    var wb = (t == "B") ? 1 : 0;
+
     //"PTS", "2PM", "2PA", "3PM", "3PA", "REB", "AST", "BLK", "STL"
     widget.ateam[0]["PTS"] = widget.ateam[0]["PTS"] + pa[0];
     widget.ateam[0]["2PM"] = widget.ateam[0]["2PM"] + pa[1];
@@ -225,6 +227,8 @@ class _GamePageState extends State<GamePage> {
     widget.ateam[0]["AST"] = widget.ateam[0]["AST"] + pa[6];
     widget.ateam[0]["BLK"] = widget.ateam[0]["BLK"] + pa[7];
     widget.ateam[0]["STL"] = widget.ateam[0]["STL"] + pa[8];
+    widget.ateam[0]["WIN"] = widget.ateam[0]["WIN"] + wa;
+    widget.ateam[0]["CNT"] = widget.ateam[0]["CNT"] + 1;
 
     widget.ateam[1]["PTS"] = widget.ateam[1]["PTS"] + pa[9];
     widget.ateam[1]["2PM"] = widget.ateam[1]["2PM"] + pa[10];
@@ -235,6 +239,8 @@ class _GamePageState extends State<GamePage> {
     widget.ateam[1]["AST"] = widget.ateam[1]["AST"] + pa[15];
     widget.ateam[1]["BLK"] = widget.ateam[1]["BLK"] + pa[16];
     widget.ateam[1]["STL"] = widget.ateam[1]["STL"] + pa[17];
+    widget.ateam[1]["WIN"] = widget.ateam[1]["WIN"] + wa;
+    widget.ateam[1]["CNT"] = widget.ateam[1]["CNT"] + 1;
 
     widget.ateam[2]["PTS"] = widget.ateam[2]["PTS"] + pa[18];
     widget.ateam[2]["2PM"] = widget.ateam[2]["2PM"] + pa[19];
@@ -245,6 +251,8 @@ class _GamePageState extends State<GamePage> {
     widget.ateam[2]["AST"] = widget.ateam[2]["AST"] + pa[24];
     widget.ateam[2]["BLK"] = widget.ateam[2]["BLK"] + pa[25];
     widget.ateam[2]["STL"] = widget.ateam[2]["STL"] + pa[26];
+    widget.ateam[2]["WIN"] = widget.ateam[2]["WIN"] + wa;
+    widget.ateam[2]["CNT"] = widget.ateam[2]["CNT"] + 1;
 
     widget.ateam[3]["PTS"] = widget.ateam[3]["PTS"] + pa[27];
     widget.ateam[3]["2PM"] = widget.ateam[3]["2PM"] + pa[28];
@@ -255,6 +263,8 @@ class _GamePageState extends State<GamePage> {
     widget.ateam[3]["AST"] = widget.ateam[3]["AST"] + pa[33];
     widget.ateam[3]["BLK"] = widget.ateam[3]["BLK"] + pa[34];
     widget.ateam[3]["STL"] = widget.ateam[3]["STL"] + pa[35];
+    widget.ateam[3]["WIN"] = widget.ateam[3]["WIN"] + wa;
+    widget.ateam[3]["CNT"] = widget.ateam[3]["CNT"] + 1;
 
     widget.bteam[0]["PTS"] = widget.bteam[0]["PTS"] + pb[0];
     widget.bteam[0]["2PM"] = widget.bteam[0]["2PM"] + pb[1];
@@ -265,6 +275,8 @@ class _GamePageState extends State<GamePage> {
     widget.bteam[0]["AST"] = widget.bteam[0]["AST"] + pb[6];
     widget.bteam[0]["BLK"] = widget.bteam[0]["BLK"] + pb[7];
     widget.bteam[0]["STL"] = widget.bteam[0]["STL"] + pb[8];
+    widget.bteam[0]["WIN"] = widget.bteam[0]["WIN"] + wb;
+    widget.bteam[0]["CNT"] = widget.bteam[0]["CNT"] + 1;
 
     widget.bteam[1]["PTS"] = widget.bteam[1]["PTS"] + pb[9];
     widget.bteam[1]["2PM"] = widget.bteam[1]["2PM"] + pb[10];
@@ -275,6 +287,8 @@ class _GamePageState extends State<GamePage> {
     widget.bteam[1]["AST"] = widget.bteam[1]["AST"] + pb[15];
     widget.bteam[1]["BLK"] = widget.bteam[1]["BLK"] + pb[16];
     widget.bteam[1]["STL"] = widget.bteam[1]["STL"] + pb[17];
+    widget.bteam[1]["WIN"] = widget.bteam[1]["WIN"] + wb;
+    widget.bteam[1]["CNT"] = widget.bteam[1]["CNT"] + 1;
 
     widget.bteam[2]["PTS"] = widget.bteam[2]["PTS"] + pb[18];
     widget.bteam[2]["2PM"] = widget.bteam[2]["2PM"] + pb[19];
@@ -285,6 +299,8 @@ class _GamePageState extends State<GamePage> {
     widget.bteam[2]["AST"] = widget.bteam[2]["AST"] + pb[24];
     widget.bteam[2]["BLK"] = widget.bteam[2]["BLK"] + pb[25];
     widget.bteam[2]["STL"] = widget.bteam[2]["STL"] + pb[26];
+    widget.bteam[1]["WIN"] = widget.bteam[1]["WIN"] + wb;
+    widget.bteam[2]["CNT"] = widget.bteam[2]["CNT"] + 1;
 
     widget.bteam[3]["PTS"] = widget.bteam[3]["PTS"] + pb[27];
     widget.bteam[3]["2PM"] = widget.bteam[3]["2PM"] + pb[28];
@@ -295,6 +311,8 @@ class _GamePageState extends State<GamePage> {
     widget.bteam[3]["AST"] = widget.bteam[3]["AST"] + pb[33];
     widget.bteam[3]["BLK"] = widget.bteam[3]["BLK"] + pb[34];
     widget.bteam[3]["STL"] = widget.bteam[3]["STL"] + pb[35];
+    widget.bteam[1]["WIN"] = widget.bteam[1]["WIN"] + wb;
+    widget.bteam[3]["CNT"] = widget.bteam[3]["CNT"] + 1;
 
     upd(widget.ateam[0]["name"], widget.ateam[0]).then((e) {
       upd(widget.ateam[1]["name"], widget.ateam[1]).then((e) {

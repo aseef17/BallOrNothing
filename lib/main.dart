@@ -6,7 +6,8 @@ import 'pregame.dart';
 import 'game.dart';
 // import 'db.dart';
 import 'pastgames.dart';
-import 'playerst.dart';
+// import 'playerst.dart';
+import 'playerstats.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         '/pregame': (context) => PreGame(),
         '/game': (context) => GamePage(null, null, null, null),
         '/pastgames': (context) => PastGames(),
-        '/playerst': (context) => PlayerStats(),
+        '/playerstats': (context) => PlayerStats(),
       },
       initialRoute: '/',
     );

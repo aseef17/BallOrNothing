@@ -26,7 +26,6 @@ class _PastGamesState extends State<PastGames> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     allgames = [];
     super.dispose();
   }
@@ -43,30 +42,27 @@ class _PastGamesState extends State<PastGames> {
                 )
               : Container(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(top: 60),
+                        margin: EdgeInsets.only(top: 40, bottom: 30),
                         child: Text(
-                          "GAME STATS",
+                          'GAME STATS',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.blue,
-                          ),
+                          style:
+                              TextStyle(fontSize: 35, color: Colors.blueAccent),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 30),
-                        height: 300,
+                        height: 550,
                         child: ListView.builder(
                           itemCount: allgames.length,
                           itemBuilder: (BuildContext ctxt, int i) {
                             return InkWell(
                               child: Container(
                                 padding: EdgeInsets.all(15),
-                                child: Text(allgames[i]["dt"]),
+                                child: Text(allgames[i]["dt"], style: TextStyle(fontSize: 18),),
                               ),
                               onTap: () {
                                 Navigator.push(
@@ -80,19 +76,26 @@ class _PastGamesState extends State<PastGames> {
                           },
                         ),
                       ),
-                      Container(
-                        child: RaisedButton(
-                          color: Colors.amber,
-                          padding: EdgeInsets.all(2),
-                          child: Text(
-                            "Player stats",
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/playerst');
-                          },
+                       Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 30),
+                      child: RaisedButton(
+                        color: Colors.blue,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 95, vertical: 15),
+                        child: Text(
+                          'PLAYER RECORDS',
+                          style: TextStyle(color: Colors.white),
                         ),
+                        onPressed: () {
+                       Navigator.pushNamed(context, '/playerstats');
+                        },
                       ),
+                    ),
+                  ),
+                )
                     ],
                   ),
                 )),
