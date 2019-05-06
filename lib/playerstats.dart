@@ -213,7 +213,7 @@ class _PlayerStatsState extends State<PlayerStats> {
                   ),
                 ),
                    Container(
-                     height: height * 0.73,
+                     height: height * 0.70,
                   child: ListView(
               children: <Widget>[
                 

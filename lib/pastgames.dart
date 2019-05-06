@@ -56,7 +56,7 @@ class _PastGamesState extends State<PastGames> {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 30),
-                        height: height*0.65,
+                        height: height*0.60,
                         child: ListView.builder(
                           itemCount: allgames.length,
                           itemBuilder: (BuildContext ctxt, int i) {
