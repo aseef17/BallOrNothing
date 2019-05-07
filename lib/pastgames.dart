@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'db.dart';
 import 'viewgame.dart';
+import 'main.dart';
 
 class PastGames extends StatefulWidget {
   @override
@@ -10,6 +11,9 @@ class PastGames extends StatefulWidget {
 var allgames = [];
 
 class _PastGamesState extends State<PastGames> {
+
+  Route HomePage = MaterialPageRoute(builder: (context) => MyHomePage());
+
   @override
   void initState() {
     getgames();
@@ -38,8 +42,22 @@ class _PastGamesState extends State<PastGames> {
       body: Container(
           child: (allgames.isEmpty)
               ? Container(
-                  child: Center(
-                    child: CircularProgressIndicator(),
+                  child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircularProgressIndicator(),
+                      Padding(padding: const EdgeInsets.all(25.0)),
+                      Text("If no Games have been Played, Press back and Start a New Game", textAlign: TextAlign.center),
+                      Padding(padding: const EdgeInsets.only(top: 15.0)),
+                      FlatButton(
+                        color: Colors.blueAccent,
+                        child: new Text("BACK", style: new TextStyle(color: Colors.white)),
+                        onPressed: () {
+                          // Navigator.of(context).pop();
+                          Navigator.pushReplacement(context, HomePage);
+                        },
+                      )
+                    ],
                   ),
                 )
               : Container(
