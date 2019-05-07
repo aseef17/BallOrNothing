@@ -35,7 +35,7 @@ class _PlayersState extends State<Players> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: 60),
+                  margin: EdgeInsets.only(top: 40),
                   child: Text(
                   'PLAYERS',
                   textAlign: TextAlign.center,
@@ -43,7 +43,7 @@ class _PlayersState extends State<Players> {
                 ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height / 100 * 70,
+                  height: MediaQuery.of(context).size.height / 100 * 77,
                   child: GridView.count(
                     crossAxisCount: 5,
                     crossAxisSpacing: 0,
@@ -55,7 +55,7 @@ class _PlayersState extends State<Players> {
                           child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Image(image: ExactAssetImage("${snap.data[i]["img"]}"), width: 50,),
+                            Image(image: ExactAssetImage("${snap.data[i]["img"]}"), width: 40,),
                             Text("${snap.data[i]['name']}"),
                           ],
                         ),
@@ -70,7 +70,7 @@ class _PlayersState extends State<Players> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 30),
+                  margin: EdgeInsets.only(top: 15),
                   width: 180,
                   child: RaisedButton.icon(
                     color: Colors.green,
