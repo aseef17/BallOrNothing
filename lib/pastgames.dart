@@ -12,7 +12,7 @@ var allgames = [];
 
 class _PastGamesState extends State<PastGames> {
 
-  Route HomePage = MaterialPageRoute(builder: (context) => MyHomePage());
+  //Route HomePage = MaterialPageRoute(builder: (context) => MyHomePage());
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _PastGamesState extends State<PastGames> {
                         child: new Text("BACK", style: new TextStyle(color: Colors.white)),
                         onPressed: () {
                           // Navigator.of(context).pop();
-                          Navigator.pushReplacement(context, HomePage);
+                          Navigator.pushReplacement(context, '/');
                         },
                       )
                     ],
