@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'db.dart';
 import 'main.dart';
@@ -12,6 +14,8 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  var ass, bss, wss;
+
   var players = [];
 
   getplayers() async {
@@ -112,11 +116,15 @@ class _GamePageState extends State<GamePage> {
   var score1 = 0, score2 = 0;
 
   void logic(i, p) {
+    ass = ListQueue.of(pa);
+    bss = ListQueue.of(pb);
+
     if (i == 0 || i == 9 || i == 18 || i == 27) {
       return;
     }
 
     if (p == 1) {
+      wss = ListQueue.of(["A"]);
       if (i == 1 ||
           i == 10 ||
           i == 19 ||
@@ -137,9 +145,10 @@ class _GamePageState extends State<GamePage> {
 
       setState(() {
         var i = 0;
-        ppa.add(pa);
       });
     } else if (p == 2) {
+      wss = ListQueue.of(["B"]);
+
       if (i == 1 ||
           i == 10 ||
           i == 19 ||
@@ -158,9 +167,11 @@ class _GamePageState extends State<GamePage> {
       pb[27] = pb[28] * 2 + pb[30] * 3;
       score2 = pb[0] + pb[9] + pb[18] + pb[27];
 
-      setState(() {
-        ppb.add(pb);
-      });
+      // print('new $pb');
+      // print("pb state hai");
+      // print(states["pb"].toString());
+
+      setState(() {});
     }
 
     if (score1 >= 20 || score2 >= 20) {
@@ -536,7 +547,7 @@ class _GamePageState extends State<GamePage> {
                     padding: EdgeInsets.all(2),
                     child: GridView.count(
                       crossAxisCount: 10,
-                      childAspectRatio: 1,
+                      childAspectRatio: 1/1.1,
                       children: List.generate(40, (i) {
                         if (i == 0 || i == 10 || i == 20 || i == 30) {
                           return Container(
@@ -618,7 +629,7 @@ class _GamePageState extends State<GamePage> {
                     style: TextStyle(fontSize: 11, color: Colors.white),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/');
                   },
                 ),
               ),
@@ -626,18 +637,24 @@ class _GamePageState extends State<GamePage> {
                 height: height * 3,
                 width: width * 30,
                 child: RaisedButton(
-                  color: Colors.amber,
-                  child: Text(
-                    "Undo",
-                    style: TextStyle(fontSize: 11, color: Colors.white),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      pa = List.from(ppa.removeLast());
-                      pb = List.from(ppb.removeLast());
-                    });
-                  },
-                ),
+                    color: Colors.amber,
+                    child: Text(
+                      "Undo",
+                      style: TextStyle(fontSize: 11, color: Colors.white),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        //  print(all);
+                        // print(pb);
+                        if(wss==null) return;
+                        if(wss.isEmpty) return;
+                        if (List.from(wss)[0] == "A") {
+                          pa = List.from(ass);
+                        } else if (List.from(wss)[0] == "B") {
+                          pb = List.from(bss);
+                        }
+                      });
+                    }),
               ),
             ],
           )

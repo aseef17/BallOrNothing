@@ -48,9 +48,17 @@ class _PreGameState extends State<PreGame> {
                 children: <Widget>[
                   Container(
                       width: width * 95,
-                      margin: EdgeInsets.only(top: height * 8),
+                      margin: EdgeInsets.only(top: height * 6),
                       child: Text(
-                        "Build your team \n  Swipe 👉 Team A | Team B 👈 Swipe",
+                        "Build Your Team",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 23),
+                      )),
+                  Container(
+                      width: width * 95,
+                      margin: EdgeInsets.only(top: height * 2),
+                      child: Text(
+                        "Swipe 👉 Team A | Team B 👈 Swipe",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 17),
                       )),
@@ -114,7 +122,7 @@ class _PreGameState extends State<PreGame> {
                                   Image(
                                     image:
                                         ExactAssetImage("${players[i]["img"]}"),
-                                    width: 30,
+                                    width: 65,
                                   ),
                                   Container(
                                     child: Text("${players[i]['name']}"),

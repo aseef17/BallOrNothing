@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'db.dart';
 import 'viewgame.dart';
-import 'playerst.dart';
 
 class PastGames extends StatefulWidget {
   @override
@@ -32,8 +31,10 @@ class _PastGamesState extends State<PastGames> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
+     final height = MediaQuery.of(context).size.height / 100;
+    final width = MediaQuery.of(context).size.width / 100;
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Container(
           child: (allgames.isEmpty)
               ? Container(
@@ -43,10 +44,10 @@ class _PastGamesState extends State<PastGames> {
                 )
               : Container(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(top: 60, bottom: 30),
+                        margin: EdgeInsets.only(top: height*7, bottom: 3),
                         child: Text(
                           'GAME STATS',
                           textAlign: TextAlign.center,
@@ -56,21 +57,16 @@ class _PastGamesState extends State<PastGames> {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 30),
-                        height: height*0.60,
+                        height: height*65,
                         child: ListView.builder(
                           itemCount: allgames.length,
                           itemBuilder: (BuildContext ctxt, int i) {
                             return InkWell(
                               child: Container(
+                                margin: EdgeInsets.only(bottom: 2),
+                                color: Colors.white,
                                 padding: EdgeInsets.all(15),
-                                child: new Column(
-                                 mainAxisAlignment: MainAxisAlignment.center,
-                                 children: <Widget>[
-                                   Text(allgames[i]["dt"], style: TextStyle(fontSize: 18)),
-                                   Divider(height: height*0.03,color: Colors.grey)
-                                 ],
-                                  
-                                ),
+                                child: Text("${i+1}.   " + allgames[i]["dt"], textAlign: TextAlign.center, style: TextStyle(fontSize: 18),),
                               ),
                               onTap: () {
                                 Navigator.push(

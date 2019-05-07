@@ -73,6 +73,34 @@ class _NewPlayerState extends State<NewPlayer> {
   }
 
   void editplayer() async {
+    if(t1.text.length > 8) {
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("⚠"),
+              content: Text(
+                "Name can't be longer than 8 alphabets",
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Ok"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          }
+          );
+
+    }
+
     if (t1.text == "" ||
         t2.text == "" ||
         t3.text == "" ||
@@ -101,7 +129,8 @@ class _NewPlayerState extends State<NewPlayer> {
                 ),
               ],
             );
-          });
+          }
+          );
       return;
     }
 
@@ -228,13 +257,13 @@ class _NewPlayerState extends State<NewPlayer> {
   }
 
   void pickImage() async {
-    print("Selecting img");
-    print("Name ${t1.text}");
+    // print("Selecting img");
+    // print("Name ${t1.text}");
     image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
     final appDocDir = await getApplicationDocumentsDirectory();
     path = appDocDir.path;
-    print("image selected: ${image.path}");
+    // print("image selected: ${image.path}");
     // await image.copy(path + "/" + t1.text);
     setState(() {
       imgp = path + "/" + t1.text;
@@ -282,7 +311,7 @@ class _NewPlayerState extends State<NewPlayer> {
   @override
   void dispose() {
     widget.pld = null;
-    print("DISPOSING");
+    // print("DISPOSING");
     super.dispose();
   }
 
