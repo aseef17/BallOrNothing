@@ -54,7 +54,7 @@ class _PastGamesState extends State<PastGames> {
                         child: new Text("BACK", style: new TextStyle(color: Colors.white)),
                         onPressed: () {
                           // Navigator.of(context).pop();
-                          Navigator.pushReplacement(context, '/');
+                          Navigator.pushReplacementNamed(context, '/');
                         },
                       )
                     ],
