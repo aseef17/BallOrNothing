@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'db.dart';
 
 class ViewGame extends StatefulWidget {
   var game;
@@ -11,26 +10,8 @@ class ViewGame extends StatefulWidget {
 
 class _ViewGameState extends State<ViewGame> {
   var cols = ["PTS", "2PM", "2PA", "3PM", "3PA", "REB", "AST", "BLK", "STL"];
-  // var game, dt;
-
-
-  // Future getgame() async {
-  //   var r = await localDB('get', widget.name, 'games', null);
-  //   game = r;
-  //   return;
-  // }
-  // @override
-  // void initState() {
-  //   // getgame();  
-  //   setState(() {
-  //     // dt = game["dt"];
-  //     // game = widget.name;
-  //   });
-  //   super.initState();
-  // }
   @override
   Widget build(BuildContext context) {
-    // print(widget.game);
     final height = MediaQuery.of(context).size.height / 100;
     final width = MediaQuery.of(context).size.width / 100;
     return Scaffold(

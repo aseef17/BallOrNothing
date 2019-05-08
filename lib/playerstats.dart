@@ -15,10 +15,10 @@ class _PlayerStatsState extends State<PlayerStats> {
   }
 
   var nc = 0;
-
   void calcInject() {
     for (int i = 0; i < data.length; i++) {
       var l = (data[i]["CNT"]) - data[i]["WIN"];
+      if (l < 0) l = 0;
       var wp =
           (data[i]["CNT"] != 0) ? (data[i]["WIN"] / data[i]["CNT"]) * 100 : 0;
       var ppg = (data[i]["CNT"] != 0) ? (data[i]["PTS"] / data[i]["CNT"]) : 0;
@@ -29,12 +29,15 @@ class _PlayerStatsState extends State<PlayerStats> {
           : 0;
       var pp3 =
           (data[i]["3PA"] != 0) ? (data[i]["3PM"] / data[i]["3PA"]) * 100 : 0;
+      if (pp3 != 0) {
+        pp3 = num.parse(pp3.toStringAsFixed(2));
+      }
 
-      data[i]["l"] = l;
+      data[i]["l"] = l.floor();
       data[i]["wp"] = num.parse(wp.toStringAsFixed(2));
       data[i]["ppg"] = num.parse(ppg.toStringAsFixed(2));
       data[i]["fg"] = num.parse(fg.toStringAsFixed(2));
-      data[i]["pp3"] = num.parse(pp3.toStringAsFixed(2));
+      data[i]["pp3"] = pp3;
     }
   }
 
@@ -50,7 +53,7 @@ class _PlayerStatsState extends State<PlayerStats> {
           Text(d[i]["WIN"].toString()),
         ),
         DataCell(Text(
-          (d[i]["l"].toStringAsFixed(2)),
+          (d[i]["l"].toString()),
         )),
         DataCell(Text(
           (d[i]["wp"].toStringAsFixed(2)),
@@ -68,7 +71,7 @@ class _PlayerStatsState extends State<PlayerStats> {
           Text(d[i]["3PM"].toString()),
         ),
         DataCell(
-          Text(d[i]["pp3"].toStringAsFixed(2)),
+          Text(d[i]["pp3"].toString()),
         ),
       ]);
       mdr.add(dr);
@@ -91,7 +94,6 @@ class _PlayerStatsState extends State<PlayerStats> {
   }
 
   sortColum(int ci, bool ascending) {
-  
     if (ci == 0) {
       if (ascending) {
         setState(() {
@@ -177,11 +179,27 @@ class _PlayerStatsState extends State<PlayerStats> {
     } else if (ci == 8) {
       if (ascending) {
         setState(() {
-          data.sort((a, b) => a["pp3"].compareTo(b["pp3"]));
+          data.sort((a, b) {
+            var t = 0;
+            if (a["pp3"] != null || b["pp3"] != null) {
+              try {
+                t = a["pp3"].compareTo(b["pp3"]);
+              } catch (e) {}
+              return t;
+            }
+          });
         });
       } else {
         setState(() {
-          data.sort((a, b) => b["pp3 "].compareTo(a["pp3"]));
+          data.sort((a, b) {
+            var t = 0;
+            if (b["pp3"] != null || a["pp3"] != null) {
+              try {
+                t = b["pp3"].compareTo(a["pp3"]);
+              } catch (e) {}
+              return t;
+            }
+          });
         });
       }
     }
@@ -190,8 +208,6 @@ class _PlayerStatsState extends State<PlayerStats> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height / 100;
-    final width = MediaQuery.of(context).size.width / 100;
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: (data.isEmpty)
@@ -202,7 +218,7 @@ class _PlayerStatsState extends State<PlayerStats> {
               child: Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: height*7),
+                  margin: EdgeInsets.only(top: height * 7),
                   child: Text(
                     'PLAYERS STATS',
                     textAlign: TextAlign.center,
@@ -217,7 +233,7 @@ class _PlayerStatsState extends State<PlayerStats> {
                   ),
                 ),
                 Container(
-                    height: height*80,
+                    height: height * 80,
                     child: ListView(
                       children: <Widget>[
                         SingleChildScrollView(
@@ -322,27 +338,6 @@ class _PlayerStatsState extends State<PlayerStats> {
                         ),
                       ],
                     )),
-
-                // Expanded(
-                //       child: Align(
-                //         alignment: Alignment.bottomCenter,
-                //         child: Container(
-                //           margin: EdgeInsets.only(bottom: 30),
-                //           child: RaisedButton(
-                //             color: Colors.blue,
-                //             padding:
-                //                 EdgeInsets.symmetric(horizontal: 95, vertical: 15),
-                //             child: Text(
-                //               'BACK',
-                //               style: TextStyle(color: Colors.white),
-                //             ),
-                //             onPressed: () {
-                //               Navigator.pop(context);
-                //             },
-                //           ),
-                //         ),
-                //       ),
-                //     )
               ],
             )),
     );

@@ -4,7 +4,6 @@ import 'db.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
-
 class ViewPlayer extends StatefulWidget {
   final String name;
   ViewPlayer(this.name, {Key key}) : super(key: key);
@@ -25,24 +24,47 @@ class _ViewPlayerState extends State<ViewPlayer> {
 
   Future getplayer(n) async {
     var r = await localDB('get', n, 'players', null);
-    // print("Output $r ENDS");
-    // print(r[0]['age']);
     return r;
   }
+
   void deleteImg(p) async {
-    print("CALLED");
     final appDocDir = await getApplicationDocumentsDirectory();
     var path = appDocDir.path + "/" + p;
     var f = File(path);
     if (f.existsSync()) {
       f.delete();
-      // print("CALLED TO DELETE $path");
-      // print("DELETED $path");
     }
+  }
+
+  calcInject(data) {
+    var i = 0;
+    var l = (data[i]["CNT"]) - data[i]["WIN"];
+    if (l < 0) l = 0;
+    var wp =
+        (data[i]["CNT"] != 0) ? (data[i]["WIN"] / data[i]["CNT"]) * 100 : 0;
+    var ppg = (data[i]["CNT"] != 0) ? (data[i]["PTS"] / data[i]["CNT"]) : 0;
+    var fg = (data[i]["2PA"] != 0 || data[i]["3PA"] != 0)
+        ? (data[i]["2PM"] + data[i]["3PM"]) /
+            (data[i]["2PA"] + data[i]["3PA"]) *
+            100
+        : 0;
+    var pp3 =
+        (data[i]["3PA"] != 0) ? (data[i]["3PM"] / data[i]["3PA"]) * 100 : 0;
+    if (pp3 != 0) {
+      pp3 = num.parse(pp3.toStringAsFixed(2));
+    }
+    data[i]["l"] = l.floor();
+    data[i]["wp"] = num.parse(wp.toStringAsFixed(2));
+    data[i]["ppg"] = num.parse(ppg.toStringAsFixed(2));
+    data[i]["fg"] = num.parse(fg.toStringAsFixed(2));
+    data[i]["pp3"] = pp3;
+    return data;
   }
 
   @override
   Widget build(BuildContext context) {
+    var data2;
+
     final height = MediaQuery.of(context).size.height / 100;
     final width = MediaQuery.of(context).size.width / 100;
 
@@ -53,6 +75,7 @@ class _ViewPlayerState extends State<ViewPlayer> {
         if (snap.hasData &&
             snap.connectionState == ConnectionState.done &&
             snap.data.isNotEmpty) {
+          data2 = calcInject(snap.data);
           t1.text = snap.data[0]["name"].toString();
           t2.text = snap.data[0]["age"].toString();
           t3.text = snap.data[0]["height"].toString();
@@ -60,7 +83,6 @@ class _ViewPlayerState extends State<ViewPlayer> {
           t5.text = snap.data[0]["strength"].toString();
           t6.text = snap.data[0]["weakness"].toString();
           image = snap.data[0]["img"].toString();
-          print("VV img $image");
 
           return ListView(
             children: <Widget>[
@@ -154,78 +176,156 @@ class _ViewPlayerState extends State<ViewPlayer> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
-                      width: width * 90,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text("PTS"),
-                          Text("2PM"),
-                          Text("2PA"),
-                          Text("3PM"),
-                          Text("3PA"),
-                          Text("REB"),
-                          Text("AST"),
-                          Text("BLK"),
-                          Text("STL"),
-                        ],
-                      )),
-                  Container(
-                      margin: EdgeInsets.only(top: height * 2),
-                      width: width * 90,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text("${snap.data[0]['PTS']}"),
-                          Text("${snap.data[0]['2PM']}"),
-                          Text("${snap.data[0]['2PA']}"),
-                          Text("${snap.data[0]['3PM']}"),
-                          Text("${snap.data[0]['3PA']}"),
-                          Text("${snap.data[0]['REB']}"),
-                          Text("${snap.data[0]['AST']}"),
-                          Text("${snap.data[0]['BLK']}"),
-                          Text("${snap.data[0]['STL']}"),
-                        ],
-                      )),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: height * 7),
-                    width: width * 40,
-                    child: RaisedButton(
-                      color: Colors.redAccent,
-                      child:
-                          Text('DELETE', style: TextStyle(color: Colors.white)),
-                      onPressed: () async {
-                        await localDB('delete', widget.name, 'players', null);    
-                        deleteImg(widget.name);                    
-                        Navigator.pop(context);
-                      },
+                    margin: EdgeInsets.only(top: height * 2),
+                    width: width * 90,
+                    child: Table(
+                      children: [
+                        TableRow(children: [
+                          TableCell(
+                              child: Padding(
+                            child: Text("W"),
+                            padding: EdgeInsets.only(top: 5),
+                          )),
+                          TableCell(
+                            child: Padding(
+                              child: Text("L"),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              child: Text("FG%"),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              child: Text("3PM"),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              child: Text("3PA"),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              child: Text("REB"),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              child: Text("AST"),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              child: Text("BLK"),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              child: Text("STL"),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          )
+                        ]),
+                        TableRow(children: [
+                          TableCell(
+                            child: Padding(
+                              child: Text(data2[0]["WIN"].toString()),
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                          ),
+                          TableCell(
+                              child: Padding(
+                            child: Text(data2[0]["l"].toString()),
+                            padding: EdgeInsets.only(top: 5),
+                          )),
+                          TableCell(
+                              child: Padding(
+                            child: Text(data2[0]['fg'].toString()),
+                            padding: EdgeInsets.only(top: 5),
+                          )),
+                          TableCell(
+                              child: Padding(
+                            child: Text("${snap.data[0]['3PM']}"),
+                            padding: EdgeInsets.only(top: 5),
+                          )),
+                          TableCell(
+                              child: Padding(
+                            child: Text("${snap.data[0]['3PA']}"),
+                            padding: EdgeInsets.only(top: 5),
+                          )),
+                          TableCell(
+                              child: Padding(
+                            child: Text("${snap.data[0]['REB']}"),
+                            padding: EdgeInsets.only(top: 5),
+                          )),
+                          TableCell(
+                              child: Padding(
+                            child: Text("${snap.data[0]['AST']}"),
+                            padding: EdgeInsets.only(top: 5),
+                          )),
+                          TableCell(
+                              child: Padding(
+                            child: Text("${snap.data[0]['BLK']}"),
+                            padding: EdgeInsets.only(top: 5),
+                          )),
+                          TableCell(
+                              child: Padding(
+                            child: Text("${snap.data[0]['STL']}"),
+                            padding: EdgeInsets.only(top: 5),
+                          ))
+                        ]),
+                      ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: height * 7),
-                    width: width * 40,
-                    child: RaisedButton(
-                      color: Colors.greenAccent,
-                      child: Text(
-                        'EDIT',
-                        style: TextStyle(color: Colors.white),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: height * 7),
+                        width: width * 40,
+                        child: RaisedButton(
+                          color: Colors.redAccent,
+                          child: Text('DELETE',
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: () async {
+                            await localDB(
+                                'delete', widget.name, 'players', null);
+                            deleteImg(widget.name);
+                            Navigator.pop(context);
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NewPlayer(snap.data),
-                            ));
-                      },
-                    ),
+                      Container(
+                        margin: EdgeInsets.only(top: height * 7),
+                        width: width * 40,
+                        child: RaisedButton(
+                          color: Colors.greenAccent,
+                          child: Text(
+                            'EDIT',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NewPlayer(snap.data),
+                                ));
+                          },
+                        ),
+                      ),
+                    ],
                   )
                 ],
-              )
+              ),
             ],
           );
         } else if (snap.connectionState == ConnectionState.done) {

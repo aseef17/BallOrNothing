@@ -15,6 +15,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   var ass, bss, wss;
+  var freeze = false;
 
   var players = [];
 
@@ -116,6 +117,8 @@ class _GamePageState extends State<GamePage> {
   var score1 = 0, score2 = 0;
 
   void logic(i, p) {
+    if (freeze == true) return;
+
     ass = ListQueue.of(pa);
     bss = ListQueue.of(pb);
 
@@ -167,10 +170,6 @@ class _GamePageState extends State<GamePage> {
       pb[27] = pb[28] * 2 + pb[30] * 3;
       score2 = pb[0] + pb[9] + pb[18] + pb[27];
 
-      // print('new $pb');
-      // print("pb state hai");
-      // print(states["pb"].toString());
-
       setState(() {});
     }
 
@@ -193,10 +192,12 @@ class _GamePageState extends State<GamePage> {
                 ),
                 actions: <Widget>[
                   new FlatButton(
-                    child: new Text("Home"),
+                    child: new Text("Ok"),
                     onPressed: () {
-                      // Navigator.of(context).pop();
-                      Navigator.pushReplacement(context, HomePage);
+                      Navigator.of(context).pop();
+                      setState(() {
+                        freeze = true;
+                      });
                       savestate(t);
                     },
                   ),
@@ -547,7 +548,7 @@ class _GamePageState extends State<GamePage> {
                     padding: EdgeInsets.all(2),
                     child: GridView.count(
                       crossAxisCount: 10,
-                      childAspectRatio: 1/1.1,
+                      childAspectRatio: 1 / 1.1,
                       children: List.generate(40, (i) {
                         if (i == 0 || i == 10 || i == 20 || i == 30) {
                           return Container(
@@ -625,7 +626,7 @@ class _GamePageState extends State<GamePage> {
                 child: RaisedButton(
                   color: Colors.red,
                   child: Text(
-                    "Back",
+                    "Home",
                     style: TextStyle(fontSize: 11, color: Colors.white),
                   ),
                   onPressed: () {
@@ -637,24 +638,25 @@ class _GamePageState extends State<GamePage> {
                 height: height * 3,
                 width: width * 30,
                 child: RaisedButton(
-                    color: Colors.amber,
-                    child: Text(
-                      "Undo",
-                      style: TextStyle(fontSize: 11, color: Colors.white),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        //  print(all);
-                        // print(pb);
-                        if(wss==null) return;
-                        if(wss.isEmpty) return;
-                        if (List.from(wss)[0] == "A") {
-                          pa = List.from(ass);
-                        } else if (List.from(wss)[0] == "B") {
-                          pb = List.from(bss);
+                  color: Colors.amber,
+                  child: Text(
+                    "Undo",
+                    style: TextStyle(fontSize: 11, color: Colors.white),
+                  ),
+                  onPressed: (freeze == false)
+                      ? () {
+                          setState(() {
+                            if (wss == null) return;
+                            if (wss.isEmpty) return;
+                            if (List.from(wss)[0] == "A") {
+                              pa = List.from(ass);
+                            } else if (List.from(wss)[0] == "B") {
+                              pb = List.from(bss);
+                            }
+                          });
                         }
-                      });
-                    }),
+                      : null,
+                ),
               ),
             ],
           )

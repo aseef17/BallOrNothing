@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'db.dart';
 import 'dart:async';
 import 'viewplayer.dart';
+import 'package:flutter/services.dart';
+
 
 
 class Players extends StatefulWidget {
@@ -17,7 +19,14 @@ class _PlayersState extends State<Players> {
 
   @override
   void initState() {
+    imageCache.clear();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // imageCache.clear();
+    super.dispose();
   }
 
   @override
@@ -97,7 +106,7 @@ class _PlayersState extends State<Players> {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 35, color: Colors.blueAccent),
                 ),
-                Text("🍃 This place is empty", style: TextStyle(fontSize: 25)),
+                Text("Empty", style: TextStyle(fontSize: 25)),
                 Container(
                   width: 180,
                   child: RaisedButton.icon(
