@@ -14,7 +14,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  var ass, bss, wss;
+  var ass, bss, wss, ascoress, bscoress;
   var freeze = false;
 
   var players = [];
@@ -121,6 +121,9 @@ class _GamePageState extends State<GamePage> {
 
     ass = ListQueue.of(pa);
     bss = ListQueue.of(pb);
+    ascoress = ListQueue.of(score1.toString().split(""));
+    bscoress = ListQueue.of(score2.toString().split(""));
+    // bscoress = ListQueue.of(List(score2));
 
     if (i == 0 || i == 9 || i == 18 || i == 27) {
       return;
@@ -151,7 +154,6 @@ class _GamePageState extends State<GamePage> {
       });
     } else if (p == 2) {
       wss = ListQueue.of(["B"]);
-
       if (i == 1 ||
           i == 10 ||
           i == 19 ||
@@ -650,8 +652,10 @@ class _GamePageState extends State<GamePage> {
                             if (wss.isEmpty) return;
                             if (List.from(wss)[0] == "A") {
                               pa = List.from(ass);
+                              score1 = int.tryParse(List.from(ascoress)[0]);
                             } else if (List.from(wss)[0] == "B") {
                               pb = List.from(bss);
+                              score2 = int.tryParse(List.from(bscoress)[0]);
                             }
                           });
                         }

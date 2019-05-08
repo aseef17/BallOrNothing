@@ -382,7 +382,7 @@ class _NewPlayerState extends State<NewPlayer> {
                 ),
               ),
               Container(
-                height: height * 60,
+                height: height * 65,
                 width: width * 40,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
