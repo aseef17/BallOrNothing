@@ -8,22 +8,13 @@ class PastGames extends StatefulWidget {
 }
 
 class _PastGamesState extends State<PastGames> {
-
-  
   Future getgames() async {
-   var r = await localDB('getall', null, 'games', null);
+    var r = await localDB('getall', null, 'games', null);
     return r;
   }
 
   @override
   void initState() {
-    // getgames().then((e){
-    //   if (e!=null) {
-    //     snap.data = []..addAll(e);
-    //   } else {
-    //     snap.data = [];
-    //   }
-    // });
     super.initState();
   }
 
@@ -37,12 +28,14 @@ class _PastGamesState extends State<PastGames> {
     final height = MediaQuery.of(context).size.height / 100;
     final width = MediaQuery.of(context).size.width / 100;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: FutureBuilder(
-        future: getgames(),
-        builder: (context, snap) {
-          if(snap.hasData && snap.connectionState == ConnectionState.done && snap.data.isNotEmpty) {
-            return Container(
+        resizeToAvoidBottomPadding: false,
+        body: FutureBuilder(
+            future: getgames(),
+            builder: (context, snap) {
+              if (snap.hasData &&
+                  snap.connectionState == ConnectionState.done &&
+                  snap.data.isNotEmpty) {
+                return Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -107,18 +100,19 @@ class _PastGamesState extends State<PastGames> {
                     ],
                   ),
                 );
-              
-          } else if (snap.connectionState == ConnectionState.done) {
-            return Container(
-                width: width*100,
+              } else if (snap.connectionState == ConnectionState.done) {
+                return Container(
+                  width: width * 100,
                   child: new Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.all(15),
                         child: Text(
-                            "Play some games first to see stats data",
-                            textAlign: TextAlign.center, style: TextStyle(fontSize: 22, height: 1.5),),
+                          "Play some games first to see stats data",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 22, height: 1.5),
+                        ),
                       ),
                       FlatButton(
                         color: Colors.blueAccent,
@@ -131,11 +125,12 @@ class _PastGamesState extends State<PastGames> {
                     ],
                   ),
                 );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        }
-      )
-    );
+              } else if (snap.connectionState == ConnectionState.active ||
+                  snap.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return Container();
+              }
+            }));
   }
 }
