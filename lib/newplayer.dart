@@ -252,7 +252,7 @@ class _NewPlayerState extends State<NewPlayer> {
       "BLK": 0,
       "STL": 0,
       "WIN": int.parse(t7.text),
-      "CNT": 0,
+      "CNT": int.parse(t7.text),
     };
 
     await localDB('add', playerobj, 'players', null);

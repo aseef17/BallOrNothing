@@ -129,10 +129,12 @@ class _PlayersState extends State<Players> {
                   ],
                 ),
               );
-            } else if (snap.connectionState == ConnectionState.active ||
-                snap.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else {
+            } 
+            // else if (snap.connectionState == ConnectionState.active ||
+            //     snap.connectionState == ConnectionState.waiting) {
+            //   return Center(child: CircularProgressIndicator());
+            // } 
+            else {
               return Container();
             }
           },
